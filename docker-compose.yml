@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  onchain-tracker:
+    build:
+      dockerfile: Dockerfile
+    container_name: onchain-tracker-back
+    environment:
+      - ETHERSCAN_API_KEY=KVVBKIRV5PP65WQIWQZY4RPE1R7AQ7U6ZJ
+    ports:
+      - 3000:3000
