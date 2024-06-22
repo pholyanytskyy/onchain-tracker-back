@@ -59,7 +59,7 @@ export class ConditionReceiverService {
         nonceCondition[0]?.nonce ?? null,
       );
 
-      scInteractionAccounts.add(addresses);
+      addresses.forEach((address) => scInteractionAccounts.add(address));
     }
 
     if (holdingCondition.length === 0) {
@@ -82,33 +82,51 @@ export class ConditionReceiverService {
             await this.tokenHoldingService.checkErc1155HoldingCondition(
               condition.address,
               Array.from(scInteractionAccounts) as string[],
-              condition.value,
+              condition.balance,
               fromBlock,
               toBlock,
             );
-          holdingConditionAccounts.add(erc1155Accounts);
+          erc1155Accounts.forEach((account) =>
+            holdingConditionAccounts.add(account),
+          );
           break;
         case ContractTypes.ERC20:
           const erc20Accounts =
             await this.tokenHoldingService.checkErc20HoldingCondition(
               condition.address,
               Array.from(scInteractionAccounts) as string[],
-              condition.value,
+              condition.balance,
               fromBlock,
               toBlock,
             );
-          holdingConditionAccounts.add(erc20Accounts);
+          erc20Accounts.forEach((account) =>
+            holdingConditionAccounts.add(account),
+          );
           break;
         case ContractTypes.ERC721:
           const erc721Accounts =
             await this.tokenHoldingService.checkErc721HoldingCondition(
               condition.address,
               Array.from(scInteractionAccounts) as string[],
-              condition.value,
+              condition.balance,
               fromBlock,
               toBlock,
             );
-          holdingConditionAccounts.add(erc721Accounts);
+          erc721Accounts.forEach((account) =>
+            holdingConditionAccounts.add(account),
+          );
+          break;
+        case ContractTypes.Native:
+          const nativeAccounts =
+            await this.tokenHoldingService.checkNativeHoldingCondition(
+              Array.from(scInteractionAccounts) as string[],
+              condition.balance,
+              fromBlock,
+              toBlock,
+            );
+          nativeAccounts.forEach((account) =>
+            holdingConditionAccounts.add(account),
+          );
           break;
         default:
           throw new Error('Invalid erc type');
@@ -116,7 +134,7 @@ export class ConditionReceiverService {
     }
 
     return {
-      accounts: Array.from(holdingConditionAccounts) as string[],
+      accounts: [...holdingConditionAccounts] as string[],
     };
   }
   // convert fromDate and toDate to range of ethereum blocks

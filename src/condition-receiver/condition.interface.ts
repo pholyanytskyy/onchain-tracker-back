@@ -13,7 +13,7 @@ export interface SCCondition {
 
 export interface TokenHoldingCondition {
   name: string;
-  ercType: 'erc20' | 'erc721' | 'erc1155';
+  ercType: 'erc20' | 'erc721' | 'erc1155' | 'native';
   address: string;
-  value: number;
+  balance: number;
 }
