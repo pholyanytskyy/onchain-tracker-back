@@ -1,13 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ConditionReceiverService } from './condition-receiver.service';
 import {
   AddConditionsRequestDto,
   FilteredAccounts,
-} from './dto/create-condition-receiver.dto';
+} from './dto/add-condition-request.dto';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ConditionType } from './condition.enum';
 
 @ApiTags('Condition Receiver')
-@Controller('condition-receiver')
+@Controller('condition')
 export class ConditionReceiverController {
   constructor(
     private readonly conditionReceiverService: ConditionReceiverService,
@@ -15,8 +16,13 @@ export class ConditionReceiverController {
 
   @ApiBody({ type: AddConditionsRequestDto })
   @ApiOkResponse({ type: FilteredAccounts })
-  @Post()
-  create(@Body() createConditionReceiverDto: AddConditionsRequestDto) {
+  @Post('validate')
+  create(@Body() createConditionReceiverDto: any) {
     return this.conditionReceiverService.create(createConditionReceiverDto);
+  }
+
+  @Get('types')
+  getTypes() {
+    return ConditionType;
   }
 }

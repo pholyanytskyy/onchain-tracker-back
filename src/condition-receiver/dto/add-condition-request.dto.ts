@@ -1,9 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Condition } from '../condition.interface';
+import {
+  SCCondition,
+  TokenHoldingCondition,
+  TxCountCondition,
+} from '../condition.interface';
 
 export class AddConditionsRequestDto {
-  @ApiProperty()
-  conditions: Condition[];
+  conditions: (SCCondition & TokenHoldingCondition & TxCountCondition)[];
 
   @ApiProperty()
   fromDate: string;
